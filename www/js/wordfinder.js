@@ -11,7 +11,7 @@ var WF = {
    */
   config: {
     height: 20,
-    width: 30,
+    width: 20,
     id: 'wordfinder'
   },
 
@@ -35,11 +35,16 @@ var WF = {
 
     var self = this;
     self.config = $.extend(true, self.config, config);
-    self.grid = new GridBoard(self.config.height, self.config.width);
+    self.grid = new GridBoard(self.config.id, self.config.width, self.config.height);
+    self.dom.wf = $('#'+self.config.id);
 
 
-    console.log(self.grid);
+    self.grid.loadWord('astronaut');
+    self.grid.loadWord('helper');
+    self.grid.loadWord('touchdown');
 
+
+    self.grid.render();
   },
 
 
