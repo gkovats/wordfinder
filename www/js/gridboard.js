@@ -105,13 +105,13 @@ var GridBoard = function(id, width, height){
      * @retrun {array} Coordinates of word (x, y, d)
      */
     loadWord: function(word) {
-      var line, x, y, c, letter, fits = false, loop = 0;
+      var line, x, y, c, collision, letter, fits = false, loop = 0;
 
       word = word.toLowerCase().replace(/\s/,'');
 
       // loop until this word finds a home
       while (!fits) {
-        line = new Line( getRand(height), getRand(width), getRand(7), word.length );
+        line = new Line( getRand(height-1), getRand(width-1), getRand(7), word.length );
         loop++;
 
         // just putting brakes on this train
@@ -126,22 +126,32 @@ var GridBoard = function(id, width, height){
           continue;
         }
 
-        fits = true;
         x = line.x;
         y = line.y;
+        collision = false;
+        // First loop through and detect collisions
         for (c = 0; c < word.length; c++) {
-          // detect any collisions with existing words on page
-          letter = word.substring(c, c+1);
-          if (gridRows[y][x] != '' && gridRows[y][x] != letter) {
-            continue;
+          if (gridRows[y][x] != '' && gridRows[y][x] != word.substring(c, c+1)) {
+            collision = true;
           }
-          gridRows[y][x] = letter;
           x += line.dx;
           y += line.dy;
         }
+        if (collision) {
+          continue;
+        }
+        // Now we've confirmed all is well, add the letters
+        x = line.x;
+        y = line.y;
+        for (c = 0; c < word.length; c++) {
+          gridRows[y][x] = word.substring(c, c+1);
+          x += line.dx;
+          y += line.dy;
+        }
+        fits = true;
 
       }
-      console.log('FITS!!: ', line.x, line.y, line.x2, line.y2, line.d);
+      console.log('FITS!!: Word:' + word + ' x:' + line.x + ' y:' + line.y + ' x2:' + line.x2 + ' y2:' + line.y2 + ' d: '+ line.d);
 
       return true;
     },

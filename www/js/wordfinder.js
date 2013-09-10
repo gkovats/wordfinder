@@ -42,6 +42,11 @@ var WF = {
     self.grid.loadWord('astronaut');
     self.grid.loadWord('helper');
     self.grid.loadWord('touchdown');
+    self.grid.loadWord('dietary');
+    self.grid.loadWord('milkshake');
+    self.grid.loadWord('marrow');
+    self.grid.loadWord('crispy');
+    self.grid.loadWord('fluffy');
 
 
     self.grid.render();

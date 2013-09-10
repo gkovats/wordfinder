@@ -3,7 +3,7 @@
   background: #DDD;
   width: 600px;
   font-family: sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -28,7 +28,7 @@
   line-height: 28px;
   cursor: pointer;
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: 600;
 }
 /* line 37, ../sass/wordfinder.scss */
 .wf-board .gb-row span:hover {
