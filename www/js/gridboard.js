@@ -18,7 +18,9 @@ var GridBoard = function(id, width, height){
     gridRows = [],
     loaded = false
     dom = $('#'+id),
-    h = 0, w = 0;
+    h = 0,
+    w = 0,
+    lines = [];
 
   // Ensure ID is on page
   if (!dom.length) {
@@ -45,24 +47,12 @@ var GridBoard = function(id, width, height){
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  // What's the y difference given a direction ID
-  function getDy(direction) {
-    dy = 0;
-    switch (direction) {
-      case 0: case 1: case 7: dy = 1; break;
-      case 3: case 4: case 5: dy = -1; break;
-    }
-    return dy;
-  }
-
-  // What's the x difference given a direction ID
-  function getDx(direction) {
-    dx = 0;
-    switch (direction) {
-      case 1: case 2: case 3: dx = 1; break;
-      case 5: case 6: case 7: dx = -1; break;
-    }
-    return dx;
+  /**
+   * What to put in blank spaces on the board
+   */
+  function getFiller() {
+    return '&nbsp;';
+    return String.fromCharCode(getRand(65, 90));
   }
 
   /**
@@ -107,7 +97,10 @@ var GridBoard = function(id, width, height){
     loadWord: function(word) {
       var line, x, y, c, collision, letter, fits = false, loop = 0;
 
-      word = word.toLowerCase().replace(/\s/,'');
+      // length check
+      if (word.length >= width || word.length >= height) {
+        throw new Exception('Word is too long for this grid.');
+      }
 
       // loop until this word finds a home
       while (!fits) {
@@ -121,7 +114,6 @@ var GridBoard = function(id, width, height){
         }
 
         // check to see if we have a fit
-        console.log('Fit check: ', line.y, line.x, line.y2, line.x2, line.d);
         if (line.y2 >= height || line.y2 < 0 || line.x2 >= width || line.x2 < 0) {
           continue;
         }
@@ -152,12 +144,8 @@ var GridBoard = function(id, width, height){
 
       }
       console.log('FITS!!: Word:' + word + ' x:' + line.x + ' y:' + line.y + ' x2:' + line.x2 + ' y2:' + line.y2 + ' d: '+ line.d);
-
-      return true;
+      return line;
     },
-
-
-
 
 
     /**
@@ -170,14 +158,14 @@ var GridBoard = function(id, width, height){
       for (h = height-1; h >= 0; h--) {
         html += '<div class="gb-row" id="gb'+h+'">'+"\n";
         for (w = 0; w < width; w++) {
-          //letter = (gridRows[h][w]) ? gridRows[h][w] : String.fromCharCode(getRand(65, 90));
-          letter = (gridRows[h][w]) ? gridRows[h][w] : '&nbsp;';
-          html += '<span id="gb' + w + '-' + h + '">' + letter + '</span>';
+          letter = (gridRows[h][w]) ? gridRows[h][w] : getFiller();
+          html += '<span id="gb' + h + '-' + w + '">' + letter + '</span>';
         }
         html += '</div>'+"\n";
       }
       dom.html(html);
-    }
+    },
+
 
   };
 

@@ -23,7 +23,7 @@
   width: 30px;
   display: block;
   float: left;
-  background: #CBF;
+  background: #9BF;
   text-align: center;
   line-height: 28px;
   cursor: pointer;
@@ -32,6 +32,6 @@
 }
 /* line 37, ../sass/wordfinder.scss */
 .wf-board .gb-row span:hover {
-  background: #729;
+  background: #36A;
   color: #fff;
 }
