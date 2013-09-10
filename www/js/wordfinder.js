@@ -7,9 +7,9 @@ var WF = {
   version: .1,
 
   /**
-   * Status Object
+   * selection Object
    */
-  status: {
+  selection: {
     y: 0,
     x: 0,
     y2: 0,
@@ -38,6 +38,9 @@ var WF = {
    */
   grid: {},
 
+  /**
+   * Collection of words
+   */
   words: {},
 
   /**
@@ -67,6 +70,8 @@ var WF = {
     self.loadWord('quarry');
     self.loadWord('yelling');
 
+
+    console.log(self.words);
 
     self.grid.render();
 
@@ -109,17 +114,46 @@ var WF = {
     }
 
     if (event.type == 'mousedown') {
-      self.status.y = parseInt(matches[1]);
-      self.status.x = parseInt(matches[2]);
-      self.status.selecting = true;
-    } else if (event.type == 'mouseup' && self.status.selecting) {
-      self.status.y2 = parseInt(matches[1]);
-      self.status.x2 = parseInt(matches[2]);
-      console.log(self.status);
-      self.status.selecting = false;
+      self.selection.y = parseInt(matches[1]);
+      self.selection.x = parseInt(matches[2]);
+      self.selection.selecting = true;
+    } else if (event.type == 'mouseup' && self.selection.selecting) {
+      self.selection.y2 = parseInt(matches[1]);
+      self.selection.x2 = parseInt(matches[2]);
+      console.log(self.selection);
+      self.selection.selecting = false;
+      // if doubleclicked, toss out
+      if (self.selection.x == self.selection.x2 && self.selection.y == self.selection.y2) {
+        return false;
+      }
+      // now check word
+      self.checkSelection( self.selection.y, self.selection.x, self.selection.y2, self.selection.x2 );
     }
     return true;
   },
+
+  checkSelection: function (y, x, y2, x2) {
+    var self = this, w, word, line;
+
+    for (word in self.words) {
+      // skip found words
+      if (self.words[word].found) { continue; }
+
+      line = self.words[word].line;
+      console.log('Checking word: '+ word, line);
+      if ( (x == line.x && y == line.y && x2 == line.x2 && y2 == line.y2) ||
+          (x2 == line.x && y2 == line.y && x == line.x2 && y == line.y2) ) {
+        alert('You found ' + word + '!!!!');
+        self.words[word].found = true;
+        self.grid.highlightLine(line);
+        break;
+      }
+    }
+
+
+
+  },
+
 
   // I do this to avoid trailing commas. That's just me.
   end: 1

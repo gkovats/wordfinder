@@ -50,7 +50,7 @@ var GridBoard = function(id, width, height){
   /**
    * What to put in blank spaces on the board
    */
-  function getFiller() {
+  function getBlank() {
     return '&nbsp;';
     return String.fromCharCode(getRand(65, 90));
   }
@@ -80,8 +80,8 @@ var GridBoard = function(id, width, height){
       default: throw new Exception ('Direction must be between 0 and 7.');
     }
     // figureout x2 and y2
-    x2 = x + (dx * length);
-    y2 = y + (dy * length);
+    x2 = x + (dx * (length-1));
+    y2 = y + (dy * (length-1));
 
     return { x: x, y: y, x2: x2, y2: y2, d: d, dx: dx, dy: dy, length: length };
   }
@@ -158,13 +158,32 @@ var GridBoard = function(id, width, height){
       for (h = height-1; h >= 0; h--) {
         html += '<div class="gb-row" id="gb'+h+'">'+"\n";
         for (w = 0; w < width; w++) {
-          letter = (gridRows[h][w]) ? gridRows[h][w] : getFiller();
+          letter = (gridRows[h][w]) ? gridRows[h][w] : getBlank();
           html += '<span id="gb' + h + '-' + w + '">' + letter + '</span>';
         }
         html += '</div>'+"\n";
       }
       dom.html(html);
     },
+
+    /**
+     * Highlight a line on the grid
+     */
+    highlightLine: function(line) {
+      var self = this,
+        x = line.x,
+        y = line.y,
+        c = 0;
+
+      for (c = 0; c < line.length; c++) {
+        console.log(x, y)
+        dom.find('#gb'+y+'-'+x).addClass('found');
+        x += line.dx;
+        y += line.dy;
+      }
+
+
+    }
 
 
   };
