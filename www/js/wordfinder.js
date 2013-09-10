@@ -51,8 +51,13 @@ var WF = {
 
     var self = this;
     self.config = $.extend(true, self.config, config);
-    self.grid = new GridBoard(self.config.id, self.config.width, self.config.height);
+
     self.dom.wf = $('#'+self.config.id);
+    self.dom.board = self.dom.wf.find('.board');
+    self.dom.words = self.dom.wf.find('.words');
+    self.dom.header = self.dom.wf.find('.header');
+
+    self.grid = new GridBoard(self.dom.board, self.config.width, self.config.height);
 
     self.loadWord('astronaut');
     self.loadWord('helper');
@@ -63,6 +68,11 @@ var WF = {
     self.loadWord('crispy');
     self.loadWord('fluffy');
     self.loadWord('freedom');
+    self.loadWord('fantasy');
+    self.loadWord('touchback');
+    self.loadWord('tightend');
+    self.loadWord('forward');
+    self.loadWord('safety');
     self.loadWord('savings');
     self.loadWord('attached');
     self.loadWord('strings');
@@ -75,10 +85,15 @@ var WF = {
 
     self.grid.render();
 
-    self.dom.wf.on('mousedown mouseup', function(event) {
+    // Apply Event handlers to DOM
+    // Track mouseclicks on board
+    self.dom.board.on('mousedown mouseup', function(event) {
       self.mouseTrack(event);
     });
-
+    // Track clicks on the word list
+    self.dom.words.find('li').on('click', function(e){
+      self.revealWord(this);
+    });
 
   },
 
@@ -96,6 +111,8 @@ var WF = {
       line: line,
       found: false
     };
+    // add word to words board
+    self.dom.words.append('<li data-word="'+word+'">'+word+'</li>');
     return true;
   },
 
@@ -132,6 +149,15 @@ var WF = {
     return true;
   },
 
+  /**
+   * Checks current selection to see if it's on a word
+   *
+   * @param {integer} y   Y coordinate
+   * @param {integer} x   X coordinate
+   * @param {integer} y2   Y2 coordinate
+   * @param {integer} x2   X2 coordinate
+   * @returns {boolean} Success
+   */
   checkSelection: function (y, x, y2, x2) {
     var self = this, w, word, line;
 
@@ -143,15 +169,42 @@ var WF = {
       console.log('Checking word: '+ word, line);
       if ( (x == line.x && y == line.y && x2 == line.x2 && y2 == line.y2) ||
           (x2 == line.x && y2 == line.y && x == line.x2 && y == line.y2) ) {
-        alert('You found ' + word + '!!!!');
+        self.dom.header.html('<p>You found ' + word + '!</p>');
         self.words[word].found = true;
+        // highlight line on board
         self.grid.highlightLine(line);
-        break;
+        // cross off the word list
+        self.dom.words.find('li[data-word='+word+']').addClass('found');
+        return true;
       }
     }
 
+    self.dom.header.html('<p class="no">Word not found there.</p>');
+    return false;
+  },
 
-
+  /**
+   * Reveals a word hidden on the board
+   */
+  revealWord: function (wordRef) {
+    var self = this, word = '';
+    if (typeof wordRef == 'string') {
+      word = wordRef;
+    } else {
+      word = $(wordRef).attr('data-word');
+    }
+    console.log(word);
+    // If word doesn't exist or is found, skip
+    if (!self.words[word] || self.words[word].found) {
+      return false;
+    }
+    // mark word found and reveal it
+    self.words[word].found = true;
+    // highlight line on board
+    self.grid.highlightLine(self.words[word].line);
+    // cross off the word list
+    self.dom.words.find('li[data-word='+word+']').addClass('found');
+    return true;
   },
 
 

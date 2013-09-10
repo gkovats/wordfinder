@@ -1,9 +1,9 @@
 
 
-  .wf-board {
+  #wordfinder {
 
     background: #DDD;
-    width: 1200px;
+    width: 900px;
     font-family: sans-serif;
     font-size: 16px;
 
@@ -15,32 +15,82 @@
     -ms-user-select: none;
     user-select: none;
 
-    .gb-row {
-      width: 100%;
-      height: 28px;
-      margin: 0;
-      padding: 0;
-    }
 
-    .gb-row span {
-      width: 30px;
-      display: block;
-      float: left;
-      background: #9BF;
+    // HEADER
+    .header {
+      width: 600px;
+      height: 30px;
       text-align: center;
-      line-height: 28px;
-      cursor: pointer;
-      text-transform: uppercase;
-      font-weight: 600;
+      padding: 0;
+      background: #fff;
+
+      p, h2 {
+        margin: 0;
+        padding: 0;
+        line-height: 30px;
+        text-align: center;
+        font-size: 16px;
+      }
+
     }
 
-    .gb-row span:hover {
-      background: #36A;
-      color: #fff;
+
+    // GAME BOARD
+
+    .board {
+      clear: both;
+      float: left;
+
+      .gb-row {
+        width: 100%;
+        height: 28px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .gb-row span {
+        width: 30px;
+        display: block;
+        float: left;
+        background: #9BF;
+        text-align: center;
+        line-height: 28px;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      .gb-row span:hover {
+        background: #36A;
+        color: #fff;
+      }
+
+      .gb-row span.found,
+      .gb-row span.found:hover {
+        background: #FFA;
+        color: #000;
+      }
+
     }
 
-    .gb-row span.found {
-      background: #FFA;
+    // WORDS LIST
+
+    .words {
+      float: left;
+      width: 200px;
+      background: #FFF;
+
+      li {
+        margin-left: 20px;
+        padding: 0;
+      }
+
+      li.found {
+        text-decoration: line-through;
+        color: #888;
+      }
+
+
     }
 
   }

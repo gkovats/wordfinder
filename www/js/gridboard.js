@@ -8,16 +8,15 @@
 /**
  * This controls the use of the grid-based board that games can be played on
  * @constructor
- * @param {string} id       DOM ID for board on page
+ * @param {object} dom      DOM reference for board on page
  * @param {integer} height  Height in squares
  * @param {integer} width   Width in squares
  */
-var GridBoard = function(id, width, height){
+var GridBoard = function(dom, width, height){
 
   var self = this,
     gridRows = [],
     loaded = false
-    dom = $('#'+id),
     h = 0,
     w = 0,
     lines = [];
@@ -51,7 +50,7 @@ var GridBoard = function(id, width, height){
    * What to put in blank spaces on the board
    */
   function getBlank() {
-    return '&nbsp;';
+    // return '&nbsp;';
     return String.fromCharCode(getRand(65, 90));
   }
 
