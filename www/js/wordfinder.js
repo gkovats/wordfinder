@@ -6,9 +6,41 @@
 var WF = {
   version: .1,
 
+  /**
+   * Configuration
+   */
+  config: {
+    height: 20,
+    width: 30,
+    id: 'wordfinder'
+  },
 
-  grid: new GridBoard(30, 30),
+  /**
+   * DOM pointers
+   */
+  dom: {
+    wf: {}
+  },
 
+  /**
+   * Grid object
+   */
+  grid: {},
+
+  /**
+   * Initialization - start the game
+   * @param {array} config    Configuration for the WordFinder
+   */
+  init: function(config) {
+
+    var self = this;
+    self.config = $.extend(true, self.config, config);
+    self.grid = new GridBoard(self.config.height, self.config.width);
+
+
+    console.log(self.grid);
+
+  },
 
 
 
