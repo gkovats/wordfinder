@@ -10,23 +10,28 @@
  * @param {integer} height  Height in squares
  * @param {integer} width   Width in squares
  */
-var GridBoard = function(dom, width, height){
+var GridBoard = function(board, control, width, height){
 
   var self = this,
     gridRows = [],
     cellSize = 30, // pixel height and width of cells
+    hCellSize = cellSize / 2, // half cellSize
     tryCap = 500,
     pWidth = cellSize * width,
     pHeight = cellSize * height,
     lines = [],
-    canvas;
+    canvas = {};
 
   // Ensure ID is on page
-  if (!dom.length) {
-    throw new Exception('ID not found on page: '+id);
+  if (!board.length || !control.length) {
+    throw new Exception('Board and Control must be defined DOM elements');
   }
 
-  canvas = dom[0].getContext("2d");
+  // Get canvas contexts
+  canvas =  {
+    board: board[0].getContext("2d"),
+    control: control[0].getContext("2d")
+  };
 
   /**
    * Clear contents of grid
@@ -42,20 +47,23 @@ var GridBoard = function(dom, width, height){
       }
     }
     // reset of canvas
-    dom.attr({'height': 0, 'width': 0})
+    board.attr({'height': 0, 'width': 0})
+      .attr({'height': pHeight, 'width': pWidth});
+    control.attr({'height': 0, 'width': 0})
       .attr({'height': pHeight, 'width': pWidth});
 
     // draw grid lines
     for (c = 0.5 + cellSize; c < pWidth; c += cellSize) {
-      canvas.moveTo(c, 0);
-      canvas.lineTo(c, pHeight);
+      canvas.board.moveTo(c, 0);
+      canvas.board.lineTo(c, pHeight);
     }
     for (c = 0.5 + cellSize; c < pHeight; c += cellSize) {
-      canvas.moveTo(0, c);
-      canvas.lineTo(pWidth, c);
+      canvas.board.moveTo(0, c);
+      canvas.board.lineTo(pWidth, c);
     }
-    canvas.strokeStyle = "rgba(0,0,0,.1)";
-    canvas.stroke();
+    canvas.board.strokeStyle = "rgba(0,0,0,.1)";
+    canvas.board.stroke();
+
   }
 
   /**
@@ -184,16 +192,16 @@ var GridBoard = function(dom, width, height){
         letter, html = '',
         ph, pw;
 
-      canvas.font = "bold 16px sans-serif";
-      canvas.textAlign = "center";
-      canvas.textBaseline = "middle";
+      canvas.board.font = "bold 16px sans-serif";
+      canvas.board.textAlign = "center";
+      canvas.board.textBaseline = "middle";
       // Render canvas
       for (h = 0; h < height; h++) {
         ph = (height - h) * cellSize - (cellSize / 2);
         for (w = 0; w < width; w++) {
           pw = w * cellSize + (cellSize / 2);
           letter = (gridRows[h][w] || getBlank()).toUpperCase();
-          canvas.fillText(letter, pw, ph);
+          canvas.board.fillText(letter, pw, ph);
         }
       }
     },
@@ -205,15 +213,26 @@ var GridBoard = function(dom, width, height){
      */
     highlightLine: function(line, className) {
       var self = this,
-        x = line.x,
-        y = line.y,
-        c = 0;
-
-      for (c = 0; c < line.length; c++) {
-        dom.find('#gb'+y+'-'+x).addClass(className);
-        x += line.dx;
-        y += line.dy;
-      }
+        cx = line.x,
+        cy = pHeight - line.y,
+        dcy = (0 - line.dy) * hCellSize;
+        dcx = line.dx * hCellSize,
+        c = {
+          x: self.getCX(line.x),
+          y: self.getCY(line.y),
+          x2: self.getCX(line.x2),
+          y2: self.getCY(line.y2)
+        };
+      console.log('Highlight Line: ', line);
+      console.log('Canvas Coords: ' + c.x + ', ' + c.y)
+      console.log('Coords: ' + (c.x + dcx) + ', ' + (c.y + dcy));
+      canvas.control.beginPath();
+      canvas.control.moveTo(c.x, c.y);
+      canvas.control.lineTo(c.x2, c.y2);
+      canvas.control.lineWidth = cellSize;
+      canvas.control.strokeStyle = "rgba(240,240,120,.5)";
+      canvas.control.lineCap = 'round';
+      canvas.control.stroke();
     },
 
     /**
@@ -252,20 +271,39 @@ var GridBoard = function(dom, width, height){
     /**
      * Given a canvax X coord, return grid X
      */
-    getX: function(px) {
-      if (px <= 0) { return 0; }
-      if (px >= pWidth) { return width-1; }
-      return Math.floor(px / cellSize);
+    getX: function(cx) {
+      if (cx <= 0) { return 0; }
+      if (cx >= pWidth) { return width-1; }
+      return Math.floor(cx / cellSize);
     },
 
     /**
      * Given a canvax Y coord, return grid Y
      */
-    getY: function(py) {
-      py = pHeight - py;
-      if (py <= 0) { return 0; }
-      if (py >= pHeight) { return height-1; }
-      return Math.floor(py / cellSize);
+    getY: function(cy) {
+      cy = pHeight - cy;
+      if (cy <= 0) { return 0; }
+      if (cy >= pHeight) { return height-1; }
+      return Math.floor(cy / cellSize);
+    },
+
+    /**
+     * Given a grid X, return canvas X
+     */
+    getCX: function(gx) {
+      if (gx <= 0) { return hCellSize; }
+      if (gx >= width) { return pWidth - hCellSize; }
+      return (gx * cellSize) + hCellSize;
+    },
+
+    /**
+     * Given a grid Y, return canvas Y
+     */
+    getCY: function(cy) {
+      cy = height - cy;
+      if (cy <= 0) { return hCellSize; }
+      if (cy >= height) { return pHeight - hCellSize; }
+      return (cy * cellSize) - hCellSize;
     },
 
     /**

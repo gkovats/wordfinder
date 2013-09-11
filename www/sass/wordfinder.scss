@@ -38,45 +38,16 @@
 
     // GAME BOARD
 
-    .board {
+    .gridboard {
       clear: both;
       float: left;
       background: #9BF;
+      position: relative;
 
-      .gb-row {
-        width: 100%;
-        height: 30px;
-        margin: 0;
-        padding: 0;
-      }
-
-      .gb-row span {
-        width: 30px;
-        display: block;
-        float: left;
-        background: #9BF;
-        text-align: center;
-        line-height: 30px;
-        cursor: pointer;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
-
-      .gb-row span:hover {
-        background: #36A;
-        color: #fff;
-      }
-
-      .gb-row span.found,
-      .gb-row span.found:hover {
-        background: #FFA;
-        color: #000;
-      }
-
-      .gb-row span.hover,
-      .gb-row span.hover:hover {
-        background: #FEE;
-        color: #000;
+      canvas.control {
+        position: absolute;
+        top: 0;
+        left: 0;
       }
 
     }

@@ -11,8 +11,10 @@ var WordFinder = function(instanceConfig) {
    * selection Object - tracks what the user is selecting
    */
   selection = {
-    y: 0,
     x: 0,
+    y: 0,
+    x2: 0,
+    y2: 0,
     selecting: false
   },
 
@@ -69,7 +71,7 @@ var WordFinder = function(instanceConfig) {
    */
   function mouseTrack (event) {
     var self = this,
-      offset = dom.board.offset(),
+      offset = dom.canvas.control.offset(),
       x = grid.getX(event.pageX - offset.left),
       y = grid.getY(event.pageY - offset.top);
 
@@ -79,23 +81,33 @@ var WordFinder = function(instanceConfig) {
       selection.x = x;
       selection.selecting = true;
       // Turn on hover tracking
-      dom.board.on('mousemove', function(event) {
+      dom.canvas.control.on('mousemove', function(event) {
         mouseTrack(event);
       });
     } else if (event.type == 'mousemove' && selection.selecting) {
       // Handle mouse hovering
-      grid.highlightLine( grid.getLine(selection.y, selection.x, y, x), 'hover' );
-   } else if (event.type == 'mouseup' && selection.selecting) {
+      if (selection.x2 != x || selection.y2 !=y) {
+        selection.x2 = x;
+        selection.y2 = y;
+        // console.log('Hover: '+x+','+y);
+        // grid.highlightLine( grid.getLine(selection.y, selection.x, y, x), 'hover' );
+      }
+
+    } else if (event.type == 'mouseup' && selection.selecting) {
       // Mouse button released
       selection.selecting = false;
-      dom.board.off('mousemove'); // release hover event
+      dom.canvas.control.off('mousemove'); // release hover event
+
+
+      grid.highlightLine( grid.getLine(selection.y, selection.x, y, x), 'hover');
+
       // if doubleclicked, toss out
       if (selection.x == x && selection.y == y) {
         return false;
       }
       var line = grid.getLine(selection.y, selection.x, y, x);
       // now check word
-      checkSelection( line.y, line.x, line.y2, line.x2 );
+      // checkSelection( line.y, line.x, line.y2, line.x2 );
     }
     return true;
   }
@@ -167,14 +179,19 @@ var WordFinder = function(instanceConfig) {
   dom.wf = $('#'+config.id);
   dom.wf.addClass('wordfinder');
   // Build needed elements and then add DOM pointers
-  dom.wf.html('<div class="header"></div><canvas class="board"></canvas><div class="words"><p>Click on word to reveal its location</p></div>');
-
-  dom.board = dom.wf.find('canvas.board');
+  dom.wf.html('<div class="header"></div><div class="gridboard"></div><div class="words"><p>Click on word to reveal its location</p></div>');
+  dom.grid = dom.wf.find('.gridboard');
+  dom.grid.html('<canvas class="board"></canvas><canvas class="control"></canvas>')
+  dom.canvas = {
+    board : dom.grid.find('.board'),
+    control : dom.grid.find('.control')
+  };
+  console.log(dom);
   dom.words = dom.wf.find('.words');
   dom.header = dom.wf.find('.header');
 
   // Init grid
-  grid = new GridBoard(dom.board, config.width, config.height);
+  grid = new GridBoard(dom.canvas.board, dom.canvas.control, config.width, config.height);
 
   // Load words
   for (w in config.words) {
@@ -187,7 +204,7 @@ var WordFinder = function(instanceConfig) {
   // Apply Event handlers to DOM
   // Track mouseclicks on board
 
-  dom.board.on('mousedown mouseup', function(event) {
+  dom.canvas.control.on('mousedown mouseup', function(event) {
     mouseTrack(event);
   });
 
