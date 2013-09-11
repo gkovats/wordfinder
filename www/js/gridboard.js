@@ -163,20 +163,64 @@ var GridBoard = function(dom, width, height){
 
     /**
      * Highlight a line on the grid
+     * @param {object} line       Line coordinates object
+     * @param {string} className  Class to add to given line coordinates
      */
-    highlightLine: function(line) {
+    highlightLine: function(line, className) {
       var self = this,
         x = line.x,
         y = line.y,
         c = 0;
 
       for (c = 0; c < line.length; c++) {
-        dom.find('#gb'+y+'-'+x).addClass('found');
+        dom.find('#gb'+y+'-'+x).addClass(className);
         x += line.dx;
         y += line.dy;
       }
-    }
+    },
 
+    /**
+     * Given coords, get line
+     * @param {integer} y         y coordinate of line (0+)
+     * @param {integer} x         x coordinate of line (0+)
+     * @param {integer} y2        y2 coordinate of line (0+)
+     * @param {integer} x2        x2 coordinate of line (0+)
+     * @return {object} Line object instance
+     */
+    getLine: function(y, x, y2, x2) {
+      var self = this,
+        line,
+        dy = y2-y,
+        dx = x2-x,
+        d = 0,
+        c = 0,
+        length = Math.max( Math.abs(dy), Math.abs(dx) ) + 1;
+
+      // I'd add line check but skipping now to save cycles
+      if (dy > 0) {
+        if (dx == 0) { d = 0; }
+        if (dx > 0) { d = 1; }
+        if (dx < 0) { d = 7; }
+      } else if (dy < 0) {
+        if (dx == 0) { d = 4; }
+        if (dx > 0) { d = 3; }
+        if (dx < 0) { d = 5; }
+      } else {
+        if (dx > 0) { d = 2; }
+        if (dx < 0) { d = 6; }
+      }
+      return new Line(y, x, d, length);
+    },
+
+    /**
+     * Given coordinates, determine if they form a line - either diagonal, vertical or horizontal
+     */
+    isLine: function(y, x, y2, x2) {
+      if (y == y2 || x == x2 || Math.abs(x - x2) == Math.abs(y - y2)) {
+        return true;
+      }
+      return false;
+    }
 
   };
 

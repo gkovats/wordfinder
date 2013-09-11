@@ -13,8 +13,6 @@ var WordFinder = function(instanceConfig) {
   selection = {
     y: 0,
     x: 0,
-    y2: 0,
-    x2: 0,
     selecting: false
   },
 
@@ -72,27 +70,38 @@ var WordFinder = function(instanceConfig) {
   function mouseTrack (event) {
     var self = this,
       id = event.target.id,
-      matches = [];
+      matches = [], x, y;
     matches = id.match(/gb(\d+)-(\d+)/);
     if (!matches.length) {
       return false; // didn't click on a cell
     }
-
+    y = parseInt(matches[1]);
+    x = parseInt(matches[2]);
     if (event.type == 'mousedown') {
-      selection.y = parseInt(matches[1]);
-      selection.x = parseInt(matches[2]);
+      // Mouse button is down
+      selection.y = y;
+      selection.x = x;
       selection.selecting = true;
-    } else if (event.type == 'mouseup' && selection.selecting) {
-      selection.y2 = parseInt(matches[1]);
-      selection.x2 = parseInt(matches[2]);
-      console.log(selection);
+      // Turn on hover tracking
+      dom.cells.on('mouseover', function(event) {
+        mouseTrack(event);
+      });
+    } else if (event.type == 'mouseover' && selection.selecting) {
+      // Handle mouse hovering
+      dom.cells.removeClass('hover');
+      grid.highlightLine( grid.getLine(selection.y, selection.x, y, x), 'hover' );
+   } else if (event.type == 'mouseup' && selection.selecting) {
+      // Mouse button released
       selection.selecting = false;
+      dom.cells.removeClass('hover'); // remove any hovering
+      dom.cells.off('mouseover'); // release hover event
       // if doubleclicked, toss out
-      if (selection.x == selection.x2 && selection.y == selection.y2) {
+      if (selection.x == x && selection.y == y) {
         return false;
       }
+      var line = grid.getLine(selection.y, selection.x, y, x);
       // now check word
-      checkSelection( selection.y, selection.x, selection.y2, selection.x2 );
+      checkSelection( line.y, line.x, line.y2, line.x2 );
     }
     return true;
   }
@@ -120,7 +129,7 @@ var WordFinder = function(instanceConfig) {
         dom.header.html('<p>You found ' + word + '!</p>');
         words[word].found = true;
         // highlight line on board
-        grid.highlightLine(line);
+        grid.highlightLine(line, 'found');
         // cross off the word list
         dom.words.find('li[data-word='+word+']').addClass('found');
         return true;
@@ -178,6 +187,7 @@ var WordFinder = function(instanceConfig) {
   }
   // Render Grid
   grid.render();
+  dom.cells = dom.board.find('span');
 
   // Apply Event handlers to DOM
   // Track mouseclicks on board

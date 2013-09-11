@@ -62,18 +62,24 @@
   background: #FFA;
   color: #000;
 }
-/* line 78, ../sass/wordfinder.scss */
+/* line 75, ../sass/wordfinder.scss */
+.wordfinder .board .gb-row span.hover,
+.wordfinder .board .gb-row span.hover:hover {
+  background: #FEE;
+  color: #000;
+}
+/* line 84, ../sass/wordfinder.scss */
 .wordfinder .words {
   float: left;
   width: 200px;
   background: #FFF;
 }
-/* line 83, ../sass/wordfinder.scss */
+/* line 89, ../sass/wordfinder.scss */
 .wordfinder .words li {
   margin-left: 20px;
   padding: 0;
 }
-/* line 88, ../sass/wordfinder.scss */
+/* line 94, ../sass/wordfinder.scss */
 .wordfinder .words li.found {
   text-decoration: line-through;
   color: #888;
