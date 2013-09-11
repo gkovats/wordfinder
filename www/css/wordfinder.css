@@ -4,6 +4,7 @@
   width: 900px;
   font-family: sans-serif;
   font-size: 16px;
+  position: relative;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -11,7 +12,7 @@
   -ms-user-select: none;
   user-select: none;
 }
-/* line 20, ../sass/wordfinder.scss */
+/* line 21, ../sass/wordfinder.scss */
 .wordfinder .header {
   width: 600px;
   height: 30px;
@@ -19,7 +20,7 @@
   padding: 0;
   background: #fff;
 }
-/* line 27, ../sass/wordfinder.scss */
+/* line 28, ../sass/wordfinder.scss */
 .wordfinder .header p, .wordfinder .header h2 {
   margin: 0;
   padding: 0;
@@ -27,19 +28,20 @@
   text-align: center;
   font-size: 16px;
 }
-/* line 40, ../sass/wordfinder.scss */
+/* line 41, ../sass/wordfinder.scss */
 .wordfinder .board {
   clear: both;
   float: left;
+  background: #9BF;
 }
-/* line 44, ../sass/wordfinder.scss */
+/* line 46, ../sass/wordfinder.scss */
 .wordfinder .board .gb-row {
   width: 100%;
   height: 30px;
   margin: 0;
   padding: 0;
 }
-/* line 51, ../sass/wordfinder.scss */
+/* line 53, ../sass/wordfinder.scss */
 .wordfinder .board .gb-row span {
   width: 30px;
   display: block;
@@ -51,37 +53,37 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-/* line 63, ../sass/wordfinder.scss */
+/* line 65, ../sass/wordfinder.scss */
 .wordfinder .board .gb-row span:hover {
   background: #36A;
   color: #fff;
 }
-/* line 69, ../sass/wordfinder.scss */
+/* line 71, ../sass/wordfinder.scss */
 .wordfinder .board .gb-row span.found,
 .wordfinder .board .gb-row span.found:hover {
   background: #FFA;
   color: #000;
 }
-/* line 75, ../sass/wordfinder.scss */
+/* line 77, ../sass/wordfinder.scss */
 .wordfinder .board .gb-row span.hover,
 .wordfinder .board .gb-row span.hover:hover {
   background: #FEE;
   color: #000;
 }
-/* line 84, ../sass/wordfinder.scss */
+/* line 86, ../sass/wordfinder.scss */
 .wordfinder .words {
   float: left;
   width: 200px;
   background: #FFF;
   padding: 10px;
 }
-/* line 90, ../sass/wordfinder.scss */
+/* line 92, ../sass/wordfinder.scss */
 .wordfinder .words li {
   margin-left: 20px;
   padding: 0;
   cursor: pointer;
 }
-/* line 96, ../sass/wordfinder.scss */
+/* line 98, ../sass/wordfinder.scss */
 .wordfinder .words li.found {
   text-decoration: line-through;
   color: #888;

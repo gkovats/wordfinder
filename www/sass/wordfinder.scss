@@ -6,6 +6,7 @@
     width: 900px;
     font-family: sans-serif;
     font-size: 16px;
+    position: relative;
 
     // no selection
     -webkit-touch-callout: none;
@@ -40,6 +41,7 @@
     .board {
       clear: both;
       float: left;
+      background: #9BF;
 
       .gb-row {
         width: 100%;
@@ -97,8 +99,7 @@
         text-decoration: line-through;
         color: #888;
       }
-
-
     }
+
 
   }

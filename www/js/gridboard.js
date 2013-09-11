@@ -14,22 +14,48 @@ var GridBoard = function(dom, width, height){
 
   var self = this,
     gridRows = [],
-    loaded = false
-    h = 0,
-    w = 0,
-    lines = [];
+    cellSize = 30, // pixel height and width of cells
+    tryCap = 500,
+    pWidth = cellSize * width,
+    pHeight = cellSize * height,
+    lines = [],
+    grid;
 
   // Ensure ID is on page
   if (!dom.length) {
     throw new Exception('ID not found on page: '+id);
   }
 
-  // load grid rows with blanks
-  for (h = 0; h < height; h++) {
-    gridRows[h] = [];
-    for (w = 0; w < width; w++) {
-      gridRows[h][w] = '';
+  grid = dom[0].getContext("2d");
+
+  /**
+   * Clear contents of grid
+   */
+  function resetGrid() {
+    var h, w, c;
+    console.log('reseting grid');
+    // load grid rows with blanks
+    for (h = 0; h < height; h++) {
+      gridRows[h] = [];
+      for (w = 0; w < width; w++) {
+        gridRows[h][w] = '';
+      }
     }
+    // reset of canvas
+    dom.attr({'height': 0, 'width': 0})
+      .attr({'height': pHeight, 'width': pWidth});
+
+    // draw grid lines
+    for (c = 0.5 + cellSize; c < pWidth; c += cellSize) {
+      grid.moveTo(c, 0);
+      grid.lineTo(c, pHeight);
+    }
+    for (c = 0.5 + cellSize; c < pHeight; c += cellSize) {
+      grid.moveTo(0, c);
+      grid.lineTo(pWidth, c);
+    }
+    grid.strokeStyle = "rgba(0,0,0,.1)";
+    grid.stroke();
   }
 
   /**
@@ -82,6 +108,12 @@ var GridBoard = function(dom, width, height){
     return { x: x, y: y, x2: x2, y2: y2, d: d, dx: dx, dy: dy, length: length };
   }
 
+  /**
+   * Initalization of grid
+   */
+  resetGrid();
+
+
   // public
   return {
 
@@ -104,7 +136,7 @@ var GridBoard = function(dom, width, height){
         loop++;
 
         // just putting brakes on this train
-        if (loop > 200) {
+        if (loop > tryCap) {
           // console.log('BREAKING - too many tries');
           return false;
         }
@@ -147,18 +179,24 @@ var GridBoard = function(dom, width, height){
      * Render the existing board
      */
     render: function() {
-      var self = this, h = 0, w = 0, letter, html = '';
+      var self = this,
+        h = 0, w = 0,
+        letter, html = '',
+        ph, pw;
 
+
+      grid.font = "bold 16px sans-serif";
+      grid.textAlign = "center";
+      grid.textBaseline = "middle";
       // Render grid
-      for (h = height-1; h >= 0; h--) {
-        html += '<div class="gb-row" id="gb'+h+'">'+"\n";
+      for (h = 0; h < height; h++) {
+        ph = (height - h) * cellSize - (cellSize / 2);
         for (w = 0; w < width; w++) {
-          letter = (gridRows[h][w]) ? gridRows[h][w] : getBlank();
-          html += '<span id="gb' + h + '-' + w + '">' + letter + '</span>';
+          pw = w * cellSize + (cellSize / 2);
+          letter = (gridRows[h][w] || getBlank()).toUpperCase();
+          grid.fillText(letter, pw, ph);
         }
-        html += '</div>'+"\n";
       }
-      dom.html(html);
     },
 
     /**

@@ -173,8 +173,9 @@ var WordFinder = function(instanceConfig) {
   dom.wf = $('#'+config.id);
   dom.wf.addClass('wordfinder');
   // Build needed elements and then add DOM pointers
-  dom.wf.html('<div class="header"></div><div class="board"></div><div class="words"><p>Click on word to reveal its location</p></div>');
-  dom.board = dom.wf.find('.board');
+  dom.wf.html('<div class="header"></div><canvas class="board"></canvas><div class="words"><p>Click on word to reveal its location</p></div>');
+
+  dom.board = dom.wf.find('canvas.board');
   dom.words = dom.wf.find('.words');
   dom.header = dom.wf.find('.header');
 
@@ -187,18 +188,29 @@ var WordFinder = function(instanceConfig) {
   }
   // Render Grid
   grid.render();
-  dom.cells = dom.board.find('span');
+  // dom.cells = dom.board.find('span');
 
   // Apply Event handlers to DOM
   // Track mouseclicks on board
+
   dom.board.on('mousedown mouseup', function(event) {
     mouseTrack(event);
   });
+
+
+  dom.board.on('mousemove', function(e) {
+    var parentOffset = dom.board.offset();
+    //or $(this).offset(); if you really just want the current element's offset
+    var rX = e.pageX - parentOffset.left;
+    var rY = e.pageY - parentOffset.top;
+    dom.header.text(rY+'x'+rX);
+  })
+
+
   // Track clicks on the word list
   dom.words.find('li').on('click', function(e){
     revealWord(this);
   });
-
 
   return {
 
