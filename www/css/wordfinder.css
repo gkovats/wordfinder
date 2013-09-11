@@ -32,29 +32,28 @@
 .wordfinder .gridboard {
   clear: both;
   float: left;
-  background: #9BF;
   position: relative;
 }
-/* line 47, ../sass/wordfinder.scss */
+/* line 46, ../sass/wordfinder.scss */
 .wordfinder .gridboard canvas.control {
   position: absolute;
   top: 0;
   left: 0;
 }
-/* line 57, ../sass/wordfinder.scss */
+/* line 56, ../sass/wordfinder.scss */
 .wordfinder .words {
   float: left;
   width: 200px;
   background: #FFF;
   padding: 10px;
 }
-/* line 63, ../sass/wordfinder.scss */
+/* line 62, ../sass/wordfinder.scss */
 .wordfinder .words li {
   margin-left: 20px;
   padding: 0;
   cursor: pointer;
 }
-/* line 69, ../sass/wordfinder.scss */
+/* line 68, ../sass/wordfinder.scss */
 .wordfinder .words li.found {
   text-decoration: line-through;
   color: #888;
