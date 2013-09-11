@@ -69,32 +69,26 @@ var WordFinder = function(instanceConfig) {
    */
   function mouseTrack (event) {
     var self = this,
-      id = event.target.id,
-      matches = [], x, y;
-    matches = id.match(/gb(\d+)-(\d+)/);
-    if (!matches.length) {
-      return false; // didn't click on a cell
-    }
-    y = parseInt(matches[1]);
-    x = parseInt(matches[2]);
+      offset = dom.board.offset(),
+      x = grid.getX(event.pageX - offset.left),
+      y = grid.getY(event.pageY - offset.top);
+
     if (event.type == 'mousedown') {
       // Mouse button is down
       selection.y = y;
       selection.x = x;
       selection.selecting = true;
       // Turn on hover tracking
-      dom.cells.on('mouseover', function(event) {
+      dom.board.on('mousemove', function(event) {
         mouseTrack(event);
       });
-    } else if (event.type == 'mouseover' && selection.selecting) {
+    } else if (event.type == 'mousemove' && selection.selecting) {
       // Handle mouse hovering
-      dom.cells.removeClass('hover');
       grid.highlightLine( grid.getLine(selection.y, selection.x, y, x), 'hover' );
    } else if (event.type == 'mouseup' && selection.selecting) {
       // Mouse button released
       selection.selecting = false;
-      dom.cells.removeClass('hover'); // remove any hovering
-      dom.cells.off('mouseover'); // release hover event
+      dom.board.off('mousemove'); // release hover event
       // if doubleclicked, toss out
       if (selection.x == x && selection.y == y) {
         return false;
@@ -196,16 +190,6 @@ var WordFinder = function(instanceConfig) {
   dom.board.on('mousedown mouseup', function(event) {
     mouseTrack(event);
   });
-
-
-  dom.board.on('mousemove', function(e) {
-    var parentOffset = dom.board.offset();
-    //or $(this).offset(); if you really just want the current element's offset
-    var rX = e.pageX - parentOffset.left;
-    var rY = e.pageY - parentOffset.top;
-    dom.header.text(rY+'x'+rX);
-  })
-
 
   // Track clicks on the word list
   dom.words.find('li').on('click', function(e){

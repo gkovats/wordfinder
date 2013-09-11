@@ -19,14 +19,14 @@ var GridBoard = function(dom, width, height){
     pWidth = cellSize * width,
     pHeight = cellSize * height,
     lines = [],
-    grid;
+    canvas;
 
   // Ensure ID is on page
   if (!dom.length) {
     throw new Exception('ID not found on page: '+id);
   }
 
-  grid = dom[0].getContext("2d");
+  canvas = dom[0].getContext("2d");
 
   /**
    * Clear contents of grid
@@ -47,15 +47,15 @@ var GridBoard = function(dom, width, height){
 
     // draw grid lines
     for (c = 0.5 + cellSize; c < pWidth; c += cellSize) {
-      grid.moveTo(c, 0);
-      grid.lineTo(c, pHeight);
+      canvas.moveTo(c, 0);
+      canvas.lineTo(c, pHeight);
     }
     for (c = 0.5 + cellSize; c < pHeight; c += cellSize) {
-      grid.moveTo(0, c);
-      grid.lineTo(pWidth, c);
+      canvas.moveTo(0, c);
+      canvas.lineTo(pWidth, c);
     }
-    grid.strokeStyle = "rgba(0,0,0,.1)";
-    grid.stroke();
+    canvas.strokeStyle = "rgba(0,0,0,.1)";
+    canvas.stroke();
   }
 
   /**
@@ -184,17 +184,16 @@ var GridBoard = function(dom, width, height){
         letter, html = '',
         ph, pw;
 
-
-      grid.font = "bold 16px sans-serif";
-      grid.textAlign = "center";
-      grid.textBaseline = "middle";
-      // Render grid
+      canvas.font = "bold 16px sans-serif";
+      canvas.textAlign = "center";
+      canvas.textBaseline = "middle";
+      // Render canvas
       for (h = 0; h < height; h++) {
         ph = (height - h) * cellSize - (cellSize / 2);
         for (w = 0; w < width; w++) {
           pw = w * cellSize + (cellSize / 2);
           letter = (gridRows[h][w] || getBlank()).toUpperCase();
-          grid.fillText(letter, pw, ph);
+          canvas.fillText(letter, pw, ph);
         }
       }
     },
@@ -248,6 +247,25 @@ var GridBoard = function(dom, width, height){
         if (dx < 0) { d = 6; }
       }
       return new Line(y, x, d, length);
+    },
+
+    /**
+     * Given a canvax X coord, return grid X
+     */
+    getX: function(px) {
+      if (px <= 0) { return 0; }
+      if (px >= pWidth) { return width-1; }
+      return Math.floor(px / cellSize);
+    },
+
+    /**
+     * Given a canvax Y coord, return grid Y
+     */
+    getY: function(py) {
+      py = pHeight - py;
+      if (py <= 0) { return 0; }
+      if (py >= pHeight) { return height-1; }
+      return Math.floor(py / cellSize);
     },
 
     /**
