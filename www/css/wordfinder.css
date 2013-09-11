@@ -73,13 +73,15 @@
   float: left;
   width: 200px;
   background: #FFF;
+  padding: 10px;
 }
-/* line 89, ../sass/wordfinder.scss */
+/* line 90, ../sass/wordfinder.scss */
 .wordfinder .words li {
   margin-left: 20px;
   padding: 0;
+  cursor: pointer;
 }
-/* line 94, ../sass/wordfinder.scss */
+/* line 96, ../sass/wordfinder.scss */
 .wordfinder .words li.found {
   text-decoration: line-through;
   color: #888;

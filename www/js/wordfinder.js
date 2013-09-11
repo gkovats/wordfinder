@@ -47,9 +47,9 @@ var WordFinder = function(instanceConfig) {
   /**
    * Abstraction for grid's loadword
    */
-  function loadWord (word) {
+  function loadWord (rawWord) {
     var self = this, line;
-    word = word.toLowerCase().replace(/\s/,'');
+    word = rawWord.toLowerCase().replace(/\s/,'');
     line = grid.loadWord(word);
 
     if (!line) { return false; }
@@ -58,7 +58,7 @@ var WordFinder = function(instanceConfig) {
       found: false
     };
     // add word to words board
-    dom.words.append('<li data-word="'+word+'">'+word+'</li>');
+    dom.words.append('<li data-word="'+word+'">'+rawWord+'</li>');
     return true;
   };
 
@@ -126,7 +126,7 @@ var WordFinder = function(instanceConfig) {
       console.log('Checking word: '+ word, line);
       if ( (x == line.x && y == line.y && x2 == line.x2 && y2 == line.y2) ||
           (x2 == line.x && y2 == line.y && x == line.x2 && y == line.y2) ) {
-        dom.header.html('<p>You found ' + word + '!</p>');
+        dom.header.html('<p>You found <b>' + word + '</b>!</p>');
         words[word].found = true;
         // highlight line on board
         grid.highlightLine(line, 'found');
@@ -158,7 +158,7 @@ var WordFinder = function(instanceConfig) {
     // mark word found and reveal it
     words[word].found = true;
     // highlight line on board
-    grid.highlightLine(words[word].line);
+    grid.highlightLine(words[word].line, 'found');
     // cross off the word list
     dom.words.find('li[data-word='+word+']').addClass('found');
     return true;
@@ -173,7 +173,7 @@ var WordFinder = function(instanceConfig) {
   dom.wf = $('#'+config.id);
   dom.wf.addClass('wordfinder');
   // Build needed elements and then add DOM pointers
-  dom.wf.html('<div class="header"></div><div class="board"></div><div class="words"></div>');
+  dom.wf.html('<div class="header"></div><div class="board"></div><div class="words"><p>Click on word to reveal its location</p></div>');
   dom.board = dom.wf.find('.board');
   dom.words = dom.wf.find('.words');
   dom.header = dom.wf.find('.header');

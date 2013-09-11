@@ -85,10 +85,12 @@
       float: left;
       width: 200px;
       background: #FFF;
+      padding: 10px;
 
       li {
         margin-left: 20px;
         padding: 0;
+        cursor: pointer;
       }
 
       li.found {
