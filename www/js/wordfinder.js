@@ -90,24 +90,21 @@ var WordFinder = function(instanceConfig) {
         selection.x2 = x;
         selection.y2 = y;
         // console.log('Hover: '+x+','+y);
-        // grid.highlightLine( grid.getLine(selection.y, selection.x, y, x), 'hover' );
+        grid.highlightLine( grid.getLine(selection.y, selection.x, y, x));
       }
 
     } else if (event.type == 'mouseup' && selection.selecting) {
       // Mouse button released
       selection.selecting = false;
       dom.canvas.control.off('mousemove'); // release hover event
-
-
-      grid.highlightLine( grid.getLine(selection.y, selection.x, y, x), 'hover');
-
       // if doubleclicked, toss out
       if (selection.x == x && selection.y == y) {
         return false;
       }
       var line = grid.getLine(selection.y, selection.x, y, x);
       // now check word
-      // checkSelection( line.y, line.x, line.y2, line.x2 );
+      checkSelection( line.y, line.x, line.y2, line.x2 );
+      grid.clearControl();
     }
     return true;
   }
@@ -135,7 +132,7 @@ var WordFinder = function(instanceConfig) {
         dom.header.html('<p>You found <b>' + word + '</b>!</p>');
         words[word].found = true;
         // highlight line on board
-        grid.highlightLine(line, 'found');
+        grid.highlightBoard(line);
         // cross off the word list
         dom.words.find('li[data-word='+word+']').addClass('found');
         return true;
@@ -164,7 +161,7 @@ var WordFinder = function(instanceConfig) {
     // mark word found and reveal it
     words[word].found = true;
     // highlight line on board
-    grid.highlightLine(words[word].line, 'found');
+    grid.highlightBoard(words[word].line);
     // cross off the word list
     dom.words.find('li[data-word='+word+']').addClass('found');
     return true;
@@ -186,7 +183,6 @@ var WordFinder = function(instanceConfig) {
     board : dom.grid.find('.board'),
     control : dom.grid.find('.control')
   };
-  console.log(dom);
   dom.words = dom.wf.find('.words');
   dom.header = dom.wf.find('.header');
 
@@ -199,7 +195,6 @@ var WordFinder = function(instanceConfig) {
   }
   // Render Grid
   grid.render();
-  // dom.cells = dom.board.find('span');
 
   // Apply Event handlers to DOM
   // Track mouseclicks on board

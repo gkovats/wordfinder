@@ -207,32 +207,43 @@ var GridBoard = function(board, control, width, height){
     },
 
     /**
-     * Highlight a line on the grid
+     * Highlight a line on the control grid
      * @param {object} line       Line coordinates object
      * @param {string} className  Class to add to given line coordinates
      */
-    highlightLine: function(line, className) {
-      var self = this,
-        cx = line.x,
-        cy = pHeight - line.y,
-        dcy = (0 - line.dy) * hCellSize;
-        dcx = line.dx * hCellSize,
-        c = {
-          x: self.getCX(line.x),
-          y: self.getCY(line.y),
-          x2: self.getCX(line.x2),
-          y2: self.getCY(line.y2)
-        };
-      console.log('Highlight Line: ', line);
-      console.log('Canvas Coords: ' + c.x + ', ' + c.y)
-      console.log('Coords: ' + (c.x + dcx) + ', ' + (c.y + dcy));
+    highlightLine: function(line) {
+      var self = this;
+      self.clearControl();
       canvas.control.beginPath();
-      canvas.control.moveTo(c.x, c.y);
-      canvas.control.lineTo(c.x2, c.y2);
+      canvas.control.moveTo(self.getCX(line.x), self.getCY(line.y));
+      canvas.control.lineTo(self.getCX(line.x2), self.getCY(line.y2));
       canvas.control.lineWidth = cellSize;
-      canvas.control.strokeStyle = "rgba(240,240,120,.5)";
+      canvas.control.strokeStyle = "rgba(240,240,120,.4)";
       canvas.control.lineCap = 'round';
       canvas.control.stroke();
+    },
+
+    /**
+     * Highlight a line on the board - used for solved words
+     * @param {object} line       Line coordinates object
+     * @param {string} className  Class to add to given line coordinates
+     */
+    highlightBoard: function(line) {
+      var self = this;
+      canvas.board.beginPath();
+      canvas.board.moveTo(self.getCX(line.x), self.getCY(line.y));
+      canvas.board.lineTo(self.getCX(line.x2), self.getCY(line.y2));
+      canvas.board.lineWidth = cellSize;
+      canvas.board.strokeStyle = "rgba(255,100,100,.4)";
+      canvas.board.lineCap = 'round';
+      canvas.board.stroke();
+    },
+
+    /**
+     * Clears the board before rendering something
+     */
+    clearControl: function() {
+      control.attr({'height': pHeight});
     },
 
     /**
