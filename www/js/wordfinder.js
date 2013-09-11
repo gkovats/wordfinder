@@ -210,4 +210,4 @@ var WF = {
 
   // I do this to avoid trailing commas. That's just me.
   end: 1
-}
+};
