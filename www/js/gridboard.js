@@ -1,8 +1,6 @@
 /**
- *
  *  ROWS, COLSS
  *  Y, X
- *
  */
 
 /**
@@ -33,7 +31,6 @@ var GridBoard = function(dom, width, height){
       gridRows[h][w] = '';
     }
   }
-
 
   /**
    * Get random number
@@ -108,7 +105,7 @@ var GridBoard = function(dom, width, height){
 
         // just putting brakes on this train
         if (loop > 200) {
-          console.log('BREAKING - too many tries');
+          // console.log('BREAKING - too many tries');
           return false;
         }
 
@@ -142,10 +139,9 @@ var GridBoard = function(dom, width, height){
         fits = true;
 
       }
-      console.log('FITS!!: Word:' + word + ' x:' + line.x + ' y:' + line.y + ' x2:' + line.x2 + ' y2:' + line.y2 + ' d: '+ line.d);
+      // console.log('FITS!!: Word:' + word + ' x:' + line.x + ' y:' + line.y + ' x2:' + line.x2 + ' y2:' + line.y2 + ' d: '+ line.d);
       return line;
     },
-
 
     /**
      * Render the existing board
@@ -175,13 +171,10 @@ var GridBoard = function(dom, width, height){
         c = 0;
 
       for (c = 0; c < line.length; c++) {
-        console.log(x, y)
         dom.find('#gb'+y+'-'+x).addClass('found');
         x += line.dx;
         y += line.dy;
       }
-
-
     }
 
 

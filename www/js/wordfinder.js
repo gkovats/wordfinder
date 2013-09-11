@@ -162,6 +162,9 @@ var WordFinder = function(instanceConfig) {
 
   // Set Dom pointers
   dom.wf = $('#'+config.id);
+  dom.wf.addClass('wordfinder');
+  // Build needed elements and then add DOM pointers
+  dom.wf.html('<div class="header"></div><div class="board"></div><div class="words"></div>');
   dom.board = dom.wf.find('.board');
   dom.words = dom.wf.find('.words');
   dom.header = dom.wf.find('.header');
