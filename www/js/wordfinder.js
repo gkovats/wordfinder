@@ -65,46 +65,64 @@ var WordFinder = function(instanceConfig) {
   };
 
   /**
-   * Mouse event handlers
+   * Mouse & Touch event handlers
    * @param {array} event     Mouse event
    * @return {boolean} Success
    */
   function mouseTrack (event) {
     var self = this,
+      eventPos = event,
       offset = dom.canvas.control.offset(),
-      x = grid.getX(event.pageX - offset.left),
-      y = grid.getY(event.pageY - offset.top);
+      x, y;
+    // Conversion for touch events as needed
+    eventPos = (event.originalEvent.touches && event.originalEvent.touches.length) ? event.originalEvent.touches[0] : event;
+    if (typeof eventPos.pageX != 'undefined') {
+      x = grid.getX(eventPos.pageX - offset.left),
+      y = grid.getY(eventPos.pageY - offset.top);
+    } else {
+      x = selection.x2;
+      y = selection.y2;
+    }
 
-    if (event.type == 'mousedown') {
-      // Mouse button is down
-      selection.y = y;
-      selection.x = x;
-      selection.selecting = true;
-      // Turn on hover tracking
-      dom.canvas.control.on('mousemove', function(event) {
-        mouseTrack(event);
-      });
-    } else if (event.type == 'mousemove' && selection.selecting) {
-      // Handle mouse hovering
-      if (selection.x2 != x || selection.y2 !=y) {
-        selection.x2 = x;
-        selection.y2 = y;
-        // console.log('Hover: '+x+','+y);
-        grid.highlightLine( grid.getLine(selection.y, selection.x, y, x));
-      }
+    dom.header.text('Event: ' + event.type + ', coord: '+x+','+y);
+    switch (event.type) {
+      case 'mousedown':
+      case 'touchstart':
+        // Mouse button is down
+        selection.y = y;
+        selection.x = x;
+        selection.selecting = true;
+        // Turn on hover tracking
+        dom.canvas.control.on('mousemove touchmove', function(event) {
+          mouseTrack(event);
+        });
+        break;
 
-    } else if (event.type == 'mouseup' && selection.selecting) {
-      // Mouse button released
-      selection.selecting = false;
-      dom.canvas.control.off('mousemove'); // release hover event
-      // if doubleclicked, toss out
-      if (selection.x == x && selection.y == y) {
-        return false;
-      }
-      var line = grid.getLine(selection.y, selection.x, y, x);
-      // now check word
-      checkSelection( line.y, line.x, line.y2, line.x2 );
-      grid.clearControl();
+      case 'mousemove':
+      case 'touchmove':
+        // Handle mouse hovering
+        if (selection.x2 != x || selection.y2 !=y) {
+          selection.x2 = x;
+          selection.y2 = y;
+          // console.log('Hover: '+x+','+y);
+          grid.highlightLine( grid.getLine(selection.y, selection.x, y, x));
+        }
+        break;
+
+      case 'mouseup':
+      case 'touchend':
+        // Mouse button released
+        selection.selecting = false;
+        dom.canvas.control.off('mousemove touchmove'); // release hover event
+        // if doubleclicked, toss out
+        if (selection.x == x && selection.y == y) {
+          return false;
+        }
+        var line = grid.getLine(selection.y, selection.x, y, x);
+        // now check word
+        checkSelection( line.y, line.x, line.y2, line.x2 );
+        grid.clearControl();
+        break;
     }
     return true;
   }
@@ -199,12 +217,13 @@ var WordFinder = function(instanceConfig) {
   // Apply Event handlers to DOM
   // Track mouseclicks on board
 
-  dom.canvas.control.on('mousedown mouseup', function(event) {
+  dom.canvas.control.on('mousedown mouseup touchstart touchend', function(event) {
+    event.preventDefault();
     mouseTrack(event);
   });
 
   // Track clicks on the word list
-  dom.words.find('li').on('click', function(e){
+  dom.words.find('li').on('click touchend', function(e){
     revealWord(this);
   });
 

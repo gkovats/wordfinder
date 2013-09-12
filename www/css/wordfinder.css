@@ -1,7 +1,7 @@
 /* line 3, ../sass/wordfinder.scss */
 .wordfinder {
   background: #DDD;
-  width: 900px;
+  width: auto;
   font-family: sans-serif;
   font-size: 16px;
   position: relative;
