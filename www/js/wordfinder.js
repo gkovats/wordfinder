@@ -224,7 +224,6 @@ var WordFinder = function(instanceConfig) {
 
   // Track clicks on the word list
   dom.words.find('li').on('click touchend', function(e){
-    revealWord(this);
   });
 
   return {

@@ -135,7 +135,7 @@ var GridBoard = function(board, control, width, height){
 
       // length check
       if (word.length >= width || word.length >= height) {
-        throw new Exception('Word is too long for this grid.');
+        return false;
       }
 
       // loop until this word finds a home
