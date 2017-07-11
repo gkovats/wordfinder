@@ -3,7 +3,7 @@
   <head>
     <title>WordFinder</title>
     <link type="text/css" href="css/wordfinder.css" rel="stylesheet" />
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="js/gridboard.js"></script>
     <script src="js/wordfinder.js"></script>
   </head>
@@ -11,15 +11,44 @@
 
 
 
-    <div id="faboo"></div>
+    <div id="wordfinder-board"></div>
 
     <script>
       var wf = new WordFinder({
-        id: 'faboo',
-        width: 16,
-        height: 16,
-        words: ['Abomination' ,'Captain America' ,'Colossus' ,'Crimson Dynamo' ,'Dr. Doom' ,'Falcon' ,'Hulk' ,'Invisible Woman' ,'Iron Man' ,'Juggernaut' ,'Magneto' ,'Mole Man' ,'Ms. Marvel' ,'Nightcrawler' ,'Sabertooth' ,'Silver Surfer' ,'Spider-Man' ,'Storm' ,'The Thing' ,'Thor' ,'Wolverine' ,'Hawkeye' ,'Aquaman' ,'Bane' ,'Batgirl' ,'Batman' ,'Batwoman' ,'Black Adam' ,'Cyborg' ,'Green Lantern' ,'Hawkgirl' ,'Hawkman' ,'Joker']
-        //words: ['Applejack' ,'Pinkie Pie' ,'Fluttershy' ,'Rainbow Dash' ,'Rarity' ,'Twilight Sparkle' ,'Apple Bloom' ,'Scootaloo' ,'Sweetie Belle' ,'Big McIntosh' ,'Braeburn' ,'Caramel' ,'Cheerilee' ,'Filthy Rich' ,'Granny Smith' ,'Hoity Toity' ,'Mayor Mare' ,'Photo Finish' ,'Sapphire Shores' ,'Daring Do' ,'Derpy' ,'Lightning Dust' ,'Flash Sentry' ,'Soarin' ,'Spitfire' ,'Princess Cadance' ,'Princess Celestia' ,'Princess Luna' ,'Fancy Pants' ,'Flam' ,'Flim' ,'Joe' ,'King Sombra' ,'Prince Blueblood' ,'Shining Armor' ,'Sunset Shimmer' ,'Babs Seed' ,'Diamond Tiara' ,'Featherweight' ,'Pipsqueak' ,'Pound Cake' ,'Pumpkin Cake' ,'Silver Spoon' ,'Snails' ,'Snips' ,'Twist']
+        id: 'wordfinder-board',
+        width: 20,
+        height: 20,
+        words: [
+			'Abomination',
+			'Captain America',
+			'Colossus',
+			'Falcon',
+			'Hulk',
+			'Iron Man',
+			'Juggernaut',
+			'Magneto',
+			'Mole Man',
+			'Nightcrawler',
+			'Sabertooth',
+			'Silver Surfer',
+			'Spider Man',
+			'Storm',
+			'The Thing',
+			'Thor',
+			'Wolverine',
+			'Hawkeye',
+			'Aquaman',
+			'Bane',
+			'Batgirl',
+			'Batman',
+			'Batwoman',
+			'Black Adam',
+			'Cyborg',
+			'Green Lantern',
+			'Hawkgirl',
+			'Hawkman',
+			'Joker'
+		]
       })
     </script>
 
