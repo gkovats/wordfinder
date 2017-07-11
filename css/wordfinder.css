@@ -1,0 +1,60 @@
+/* line 3, ../sass/wordfinder.scss */
+.wordfinder {
+  background: #DDD;
+  width: auto;
+  font-family: sans-serif;
+  font-size: 16px;
+  position: relative;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+/* line 21, ../sass/wordfinder.scss */
+.wordfinder .header {
+  width: 600px;
+  height: 30px;
+  text-align: center;
+  padding: 0;
+  background: #fff;
+}
+/* line 28, ../sass/wordfinder.scss */
+.wordfinder .header p, .wordfinder .header h2 {
+  margin: 0;
+  padding: 0;
+  line-height: 30px;
+  text-align: center;
+  font-size: 16px;
+}
+/* line 41, ../sass/wordfinder.scss */
+.wordfinder .gridboard {
+  clear: both;
+  float: left;
+  position: relative;
+}
+/* line 46, ../sass/wordfinder.scss */
+.wordfinder .gridboard canvas.control {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+/* line 56, ../sass/wordfinder.scss */
+.wordfinder .words {
+  float: left;
+  width: 200px;
+  background: #FFF;
+  padding: 10px;
+}
+/* line 62, ../sass/wordfinder.scss */
+.wordfinder .words li {
+  margin-left: 20px;
+  padding: 0;
+  cursor: pointer;
+}
+/* line 68, ../sass/wordfinder.scss */
+.wordfinder .words li.found {
+  text-decoration: line-through;
+  color: #888;
+}

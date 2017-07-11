@@ -1,4 +1,4 @@
-css_dir = "www/css";
-http_path = "www";
-sass_dir = "www/sass";
-images_dir = "www/img";
+css_dir = "css";
+http_path = "./";
+sass_dir = "sass";
+images_dir = "img";
